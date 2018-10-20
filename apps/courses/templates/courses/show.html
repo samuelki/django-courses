@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Course</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    {% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'courses/css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in message %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h1>{{ course.name }}</h1>
+        <p>Description: {{ course.description.description }}</p>
+
+        <form action="/courses/{{ course.id }}/comment" method="POST">
+            {% csrf_token %}
+            <h2>Add comment</h2>
+            <label for="name">Name:</label>
+            <input type="text" name="name">
+            <label for="comment">Comment:</label>
+            <textarea name="comment"></textarea>
+            <br>
+            <input type="submit" value="Comment" class="button">
+        </form>
+
+        <h2>Comments</h2>
+        {% if comments == None %}
+            <p>There are no comments for this course.</p>
+        {% else %}
+            {% for comment in comments %}
+                <div class="comment">
+                    <h5>{{ comment.name }}</h5>
+                    <p>{{ comment.comment }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <a href="/">Go Back</a>
+    </div>
+</body>
+</html>
